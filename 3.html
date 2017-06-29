@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>Document</title>
+	 <script>
+	 	(function(doc,win){
+            function change(){
+                doc.documentElement.style.fontSize=20*doc.documentElement.clientWidth/320+'px';
+            }
+            change();
+            win.addEventListener('resize',change,false);
+        })(document,window)
+
+        function a2d(n){
+            return n*180/Math.PI;
+        }
+        document.addEventListener('DOMContentLoaded',function(){
+            var d=0;
+            var oBox=document.getElementById('box');
+            function getD(ev){
+                var x1=oBox.offsetLeft+oBox.offsetWidth/2;
+                var y1=oBox.offsetTop+oBox.offsetHeight/2;
+                var x2=ev.targetTouches[0].pageX;
+                var y2=ev.targetTouches[0].pageY;
+                var y=y1-y2;
+                var x=x2-x1;
+                return a2d(Math.atan2(y,x));
+            }
+            oBox.addEventListener('touchstart',function(ev){
+                var downD=getD(ev);
+                var oldD=d;
+                function move(ev){
+                    d=oldD+downD-getD(ev);
+                    oBox.style.WebkitTransform='rotate('+d+'deg)';
+                }
+                addEventListener('touchmove',move,false);
+            },false)
+        },false);
+	 </script>
+	  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        html{
+            font-size: 20px;
+        }
+        #box{
+            width: 5rem;
+            height: 5rem;
+          	margin:2rem auto;
+          	background: red;
+        }
+    </style>
+</head>
+<body>
+	<div id="box"></div>
+</body>
+</html>
